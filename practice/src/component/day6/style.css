@@ -1,0 +1,23 @@
+/* style.css */
+
+/* Card container styles */
+.card {
+    max-width: 24rem; /* max width for the card */
+    margin: 1rem auto; /* center the card */
+    background-color: white; /* white background */
+    padding: 1.5rem; /* space inside the card */
+    border-radius: 0.5rem; /* rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow effect */
+  }
+  
+  .card h2 {
+    font-size: 1.5rem; /* large font for the title */
+    font-weight: 600; /* semi-bold font weight */
+    color: #333; /* dark gray text for the title */
+  }
+  
+  .card p {
+    margin-top: 0.5rem; /* spacing between title and content */
+    color: #555; /* lighter gray text for the content */
+  }
+  
