@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import Card from './Card';
+import DialogBox from './DialogBox';
 
 const Note_Taking = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
+  const [keys,setkeys]=useState();
   const [notes, setNotes] = useState(() => {
     const storedNotes = localStorage.getItem("notes");
     return storedNotes ? JSON.parse(storedNotes) : []
   });
 
-   const [currentPage, setCurrentPage] = useState(1); // Tracks the current page
+  const [currentPage, setCurrentPage] = useState(1); // Tracks the current page
   const itemsPerPage = 2; // Number of notes per page
-
   const totalPages = Math.ceil(notes.length / itemsPerPage);
   const handleform = (e) => {
     e.preventDefault();
@@ -81,7 +81,15 @@ const Note_Taking = () => {
       </form>
       <p>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
       {notes.length > 1 &&
-        <button onClick={handledeleteAll}>Delete ALL</button>
+      <div>
+        <DialogBox 
+        handledeleteAll={handledeleteAll}
+        
+       
+        ></DialogBox>
+
+        <p>Total notes created: {notes.length}</p>
+      </div>
       }
       <div>
         {
