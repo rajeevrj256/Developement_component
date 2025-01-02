@@ -74,14 +74,26 @@ const Note_Taking = () => {
 //serach handle;
   const handleserach = (key) => {
     setkeys(key);
-    if (key === '') {
-      setFilterData(notes);
-    } else {
-      const filteredNotes = notes.filter((note) =>
-        note.title.toLowerCase().includes(key.toLowerCase())
-      );
-      setFilterData(filteredNotes);
+    applyFilters(key, categoryKey);
+  };
+
+  
+  const applyFilters = (searchKey, categoryKey) => {
+    let filteredNotes = notes;
+
+    
+    if (categoryKey !== "ALL") {
+      filteredNotes = filteredNotes.filter((note) => note.category === categoryKey);
     }
+
+    
+    if (searchKey) {
+      filteredNotes = filteredNotes.filter((note) =>
+        note.title.toLowerCase().includes(searchKey.toLowerCase())
+      );
+    }
+
+    setFilterData(filteredNotes); 
   };
 
   const handlecategoryfilter=(key)=>{
