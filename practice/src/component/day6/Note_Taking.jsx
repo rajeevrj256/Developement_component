@@ -6,7 +6,9 @@ const Note_Taking = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [category,setCategory]=useState("Work");
   const [keys,setkeys]=useState();
+  const [categoryKey,setSerachCategoryKey]=useState("ALL");
   const [notes, setNotes] = useState(() => {
     const storedNotes = localStorage.getItem("notes");
     return storedNotes ? JSON.parse(storedNotes) : []
@@ -24,14 +26,26 @@ const Note_Taking = () => {
   const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
-
+  const categoryoption={
+   
+    option1:"Work",
+    option2:"Personal",
+    option3:"Study",
+  }
+  const categoryfilteroption={
+    option1:"ALL",
+    option2:"Work",
+    option3:"Personal",
+    option4:"Study",
+  }
   const handleform = (e) => {
     e.preventDefault();
 
-    const newNote = { title, content: description };
+    const newNote = { title, content: description ,category};
 
     const updatedNotes = [...notes, newNote];
     setNotes(updatedNotes);
+    setFilterData(updatedNotes)
 
 
 
@@ -69,6 +83,20 @@ const Note_Taking = () => {
       setFilterData(filteredNotes);
     }
   };
+
+  const handlecategoryfilter=(key)=>{
+         setSerachCategoryKey(key);
+         if(key==="ALL"){
+          setFilterData(notes);
+         }else{
+          const filterdata=notes.filter((note)=>note.category.includes(key));
+          setFilterData(filterdata);
+         }
+  }
+
+  const handlecategorychange=(e)=>{
+    setCategory(e.target.value);
+  }
   
 
   useEffect(() => {
@@ -95,6 +123,22 @@ const Note_Taking = () => {
           onChange={(e) => { setDescription(e.target.value) }}
           placeholder='Enter Description ' />
         <br />
+        <label >Category</label>
+        <br />
+        <select
+        value={category}
+
+        onChange={handlecategorychange}
+        >
+          {Object.keys(categoryoption).map((key)=>{
+          return(
+            <option key={key} value={categoryoption[key]}>
+              {categoryoption[key]}
+
+            </option>
+            );
+          })}
+        </select>
 
         <button type='submit'>Add Note</button>
         
@@ -109,6 +153,19 @@ const Note_Taking = () => {
       placeholder='search By title'></input>
       <button type='search'>Search</button>
       <p>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+      <select
+        value={categoryKey}
+        onChange={(e)=>{handlecategoryfilter(e.target.value)}}
+        >
+          {Object.keys(categoryfilteroption).map((key)=>{
+          return(
+            <option key={key} value={categoryfilteroption[key]}>
+              {categoryfilteroption[key]}
+
+            </option>
+            );
+          })}
+        </select>
       {notes.length > 1 &&
       <div>
         <DialogBox 

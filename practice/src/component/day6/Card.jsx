@@ -34,6 +34,7 @@ const Card = ({ note, index, handledeleteNotes, handleUpdateNotes }) => {
         </div>
       ) : (
         <div>
+          <label>{note.category}</label>
           <h2>{note.title}</h2>
           <p>{note.content}</p>
           <button onClick={() => handledeleteNotes(index)}>Delete</button>
