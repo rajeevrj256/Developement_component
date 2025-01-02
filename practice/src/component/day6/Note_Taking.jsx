@@ -12,9 +12,19 @@ const Note_Taking = () => {
     return storedNotes ? JSON.parse(storedNotes) : []
   });
 
+  const [filterdata,setFilterData]=useState(notes);
+ //pagination
   const [currentPage, setCurrentPage] = useState(1); // Tracks the current page
   const itemsPerPage = 2; // Number of notes per page
-  const totalPages = Math.ceil(notes.length / itemsPerPage);
+  const totalPages = Math.ceil(filterdata.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const visibleNotes = filterdata.slice(startIndex, endIndex);
+
+  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+
+
   const handleform = (e) => {
     e.preventDefault();
 
@@ -30,11 +40,13 @@ const Note_Taking = () => {
   }
   const handledeleteAll = () => {
     setNotes([]);
+    setFilterData([]);
 
   }
   const handledeleteNotes = (index) => {
     const updatedNotes = notes.filter((_, i) => i !== index);
     setNotes(updatedNotes);
+    setFilterData(updatedNotes);
 
   }
 
@@ -42,19 +54,28 @@ const Note_Taking = () => {
     const updatedNote=[...notes];
     updatedNote[index]={title:editedTitle,content:editedDescription};
     setNotes(updatedNote);
+    setFilterData(updatedNote);
 
   }
+//serach handle;
+  const handleserach = (key) => {
+    setkeys(key);
+    if (key === '') {
+      setFilterData(notes);
+    } else {
+      const filteredNotes = notes.filter((note) =>
+        note.title.toLowerCase().includes(key.toLowerCase())
+      );
+      setFilterData(filteredNotes);
+    }
+  };
+  
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes])
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const visibleNotes = notes.slice(startIndex, endIndex);
-
-  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  
 
 
 
@@ -76,9 +97,17 @@ const Note_Taking = () => {
         <br />
 
         <button type='submit'>Add Note</button>
+        
+        
 
 
       </form>
+
+      <input
+      onChange={(e)=>{handleserach(e.target.value)}}
+      value={keys}
+      placeholder='search By title'></input>
+      <button type='search'>Search</button>
       <p>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
       {notes.length > 1 &&
       <div>
@@ -102,7 +131,7 @@ const Note_Taking = () => {
           )
       )}
       </div>
-      {notes.length > 2 &&
+      {filterdata.length > 2 &&
       <div className="pagination">
         <button onClick={handlePrevPage} disabled={currentPage === 1}>
           Previous
